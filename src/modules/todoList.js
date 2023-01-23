@@ -1,5 +1,5 @@
 import Task from './task.js';
-import Form from './form.js';
+import DomEvents from './domEvents.js';
 import LocalStorage from './localStorage.js';
 
 export default class TodoList {
@@ -13,7 +13,7 @@ export default class TodoList {
     const newTask = new Task(description, completed, newIndex);
     this.tasks.push(newTask);
     this.drawTable();
-    Form.refreshTasksEvents();
+    DomEvents.refreshTasksEvents();
     LocalStorage.saveToLocalStorage(this.tasks);
   }
 
@@ -39,14 +39,14 @@ export default class TodoList {
   completeTask(task) {
     task.completed = true;
     this.drawTable();
-    Form.refreshTasksEvents();
+    DomEvents.refreshTasksEvents();
     LocalStorage.saveToLocalStorage(this.tasks);
   }
 
   uncompleteTask(task) {
     task.completed = false;
     this.drawTable();
-    Form.refreshTasksEvents();
+    DomEvents.refreshTasksEvents();
     LocalStorage.saveToLocalStorage(this.tasks);
   }
 
@@ -56,7 +56,7 @@ export default class TodoList {
     this.resetIndex();
 
     this.drawTable();
-    Form.refreshTasksEvents();
+    DomEvents.refreshTasksEvents();
     LocalStorage.saveToLocalStorage(this.tasks);
   }
 
@@ -87,7 +87,7 @@ export default class TodoList {
     this.resetIndex();
 
     this.drawTable();
-    Form.refreshTasksEvents();
+    DomEvents.refreshTasksEvents();
     LocalStorage.saveToLocalStorage(this.tasks);
   }
 }

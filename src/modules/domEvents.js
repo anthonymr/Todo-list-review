@@ -1,60 +1,60 @@
 import LocalStorage from './localStorage.js';
 
-export default class Form {
+export default class DomEvents {
   constructor(list, domElements) {
-    Form.list = list;
+    DomEvents.list = list;
 
     this.addInput = document.querySelector(`#${domElements.newTaskInput}`);
     this.addIcon = document.querySelector(`#${domElements.newTaskIcon}`);
     this.clearButton = document.querySelector(`#${domElements.clearAllCompletedTasks}`);
 
-    this.addInput.addEventListener('keypress', Form.addEvent.bind(this));
-    this.addIcon.addEventListener('click', Form.addEvent.bind(this));
+    this.addInput.addEventListener('keypress', DomEvents.addEvent.bind(this));
+    this.addIcon.addEventListener('click', DomEvents.addEvent.bind(this));
     this.clearButton.addEventListener('click', list.clearAllCompleted.bind(list));
 
     const storedTasks = LocalStorage.loadLocalStorage();
 
     storedTasks.forEach((task) => {
-      Form.list.addTask(task.description, task.completed);
+      DomEvents.list.addTask(task.description, task.completed);
     });
   }
 
   static list;
 
   static refreshTasksEvents() {
-    Form.list.tasks.forEach((task) => {
+    DomEvents.list.tasks.forEach((task) => {
       task.domElement.classList.remove('editing');
       task.editing = false;
 
-      task.domElement.addEventListener('dragstart', Form.dragTask.bind(task));
-      task.domElement.addEventListener('drop', Form.dropTask.bind(task));
-      task.domElement.addEventListener('dragover', Form.allowDropTask.bind(task));
+      task.domElement.addEventListener('dragstart', DomEvents.dragTask.bind(task));
+      task.domElement.addEventListener('drop', DomEvents.dropTask.bind(task));
+      task.domElement.addEventListener('dragover', DomEvents.allowDropTask.bind(task));
 
-      task.domElement.addEventListener('click', Form.editEvent.bind(task));
-      task.domDeleteIcon.addEventListener('click', Form.removeEvent.bind(task));
-      task.domCheck.addEventListener('change', Form.toggleCompleted.bind(task));
+      task.domElement.addEventListener('click', DomEvents.editEvent.bind(task));
+      task.domDeleteIcon.addEventListener('click', DomEvents.removeEvent.bind(task));
+      task.domCheck.addEventListener('change', DomEvents.toggleCompleted.bind(task));
     });
   }
 
   static addEvent(event) {
     if (event.key === 'Enter' || event.type === 'click') {
-      Form.list.addTask(this.addInput.value);
+      DomEvents.list.addTask(this.addInput.value);
       this.addInput.value = '';
     }
   }
 
   static removeEvent() {
     this.editing = false;
-    Form.list.removeTask(this.index);
-    Form.list.drawTable();
-    Form.refreshTasksEvents();
+    DomEvents.list.removeTask(this.index);
+    DomEvents.list.drawTable();
+    DomEvents.refreshTasksEvents();
   }
 
   static toggleCompleted(event) {
     if (event.currentTarget.checked) {
-      Form.list.completeTask(this);
+      DomEvents.list.completeTask(this);
     } else {
-      Form.list.uncompleteTask(this);
+      DomEvents.list.uncompleteTask(this);
     }
   }
 
@@ -70,7 +70,7 @@ export default class Form {
 
     this.domInput.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
-        Form.list.editTask(this);
+        DomEvents.list.editTask(this);
       }
     });
   }
@@ -88,6 +88,6 @@ export default class Form {
 
     const origin = e.dataTransfer.getData('index');
     const target = this.index;
-    Form.list.switchIndexes(origin, target);
+    DomEvents.list.switchIndexes(origin, target);
   }
 }
